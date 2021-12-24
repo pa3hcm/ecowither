@@ -22,13 +22,18 @@ this includes data of additional sensors (Wunderground doesn't).
 
 I selected InfluxDB v2 as a reliable and easy-to-use time series database.
 The code includes an example docker-compose.yml to start the containerized
-version. Start the container before running Ecowither.
+version. Start the container before running Ecowither:
+
+```
+cd influxdb
+docker-compose up -d
+cd ..
+```
 
 Now build the Ecowither container from the same directory that holds the
 Dockerfile:
 
 ```
-cd ecowitt
 docker build -t ecowither:0.1 .
 ```
 
