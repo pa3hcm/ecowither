@@ -6,15 +6,17 @@ import os
 
 influxdb_token = os.environ.get('INFLUXDB_TOKEN', 'no-token')
 influxdb_url = os.environ.get('INFLUXDB_URL', 'http://localhost:8086/')
-influxdb_org = os.environ.get('INFLUXDB_ORG', 'some_org')
+influxdb_org = os.environ.get('INFLUXDB_ORG', 'my-weather-station')
 influxdb_bucket = os.environ.get('INFLUXDB_BUCKET', 'ecowitt')
 station_id = os.environ.get('STATION_ID', 'my-station')
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def version():
-    return "Ecowither v0.1"
+    return "Ecowither v0.1\n"
+
 
 @app.route('/log/ecowitt', methods=['POST'])
 def logEcowitt():
@@ -32,7 +34,6 @@ def logEcowitt():
             tempC = (float(value) - 32) * 5/9
             value = "{:.2f}".format(tempC)
             key = key[:-1] + 'c'
-
 
         # Convert pressure inches to hPa
         if key in ['baromrelin', 'baromabsin']:
@@ -66,6 +67,7 @@ def logEcowitt():
         write_api.write(influxdb_bucket, influxdb_org, data)
         
     return data + "\n"
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8088, debug=True)
