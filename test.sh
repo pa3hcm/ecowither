@@ -1,0 +1,8 @@
+#!/bin/bash
+
+while true
+do
+  curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' -d 'PASSKEY=302826216D0133E0600DCE7AAF10AFC4&stationtype=WH2650A_V1.6.8&dateutc=2021-12-24+11:31:57&tempinf=66.0&humidityin=51&baromrelin=29.565&baromabsin=29.565&tempf=47.8&humidity=91&winddir=261&windspeedmph=8.95&windgustmph=14.76&maxdailygust=21.70&solarradiation=57.25&uv=0&rainratein=0.000&eventrainin=0.071&hourlyrainin=0.000&dailyrainin=0.012&weeklyrainin=0.110&monthlyrainin=1.421&yearlyrainin=24.256&totalrainin=24.256&temp1f=49.46&humidity1=98&temp2f=63.50&humidity2=51&wh65batt=0&wh25batt=0&batt1=0&batt2=0&freq=868M&model=WH2650' 'http://172.17.0.2:8088/log/ecowitt'
+  sleep 5
+done
+exit 0
