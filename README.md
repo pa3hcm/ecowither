@@ -32,14 +32,17 @@ cd ecowitt
 docker build -t ecowither:0.1 .
 ```
 
-Now run the Ecowither container:
+Now run the Ecowither container. Ensure the network name is set correctly
+(use `docker network ls` to find out the correct network name created by
+the InfluxDB container). Also check the name of the InfluxDB container in
+the given URL (use `docker ps`).
 
 ```
-docker run -d ecowither:0.1 -p 8088:8088 \
-  -e INFLUXDB_URL='http://influxdb2_influxdb_1:8086' \
-  -e INFLUXDB_TOKEN='Nw0cN7uOoXWc6TaO7b4f_35-je7nbE1o2uaJjl-pHzwTtbAW-cn-9g==' \
-  -e INFLUXDB_ORG=my-weather-station \
-  -e STATION_ID=WS1
+docker run -d --name ecowither --network influxdb2_ecowitt_net -p 8088:8088 \
+  -e INFLUXDB_ORG=my-weather-station -e STATION_ID=IEVERD6 \
+  -e INFLUXDB_URL='http://influxdb2_influxdb_1:8086/' \
+  -e INFLUXDB_TOKEN='RbvidPcc6x8h8Ym2D8t4M3qC37Rx4_V76LFCRGASHJyRlwJQ==' \
+  ecowither:0.1
 ```
 
 

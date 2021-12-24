@@ -4,13 +4,22 @@ from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 import os
 
+app = Flask(__name__)
+
 influxdb_token = os.environ.get('INFLUXDB_TOKEN', 'no-token')
 influxdb_url = os.environ.get('INFLUXDB_URL', 'http://localhost:8086/')
 influxdb_org = os.environ.get('INFLUXDB_ORG', 'my-weather-station')
 influxdb_bucket = os.environ.get('INFLUXDB_BUCKET', 'ecowitt')
 station_id = os.environ.get('STATION_ID', 'my-station')
 
-app = Flask(__name__)
+print ("Ecowither v0.1")
+print ("==============")
+print ("Configuration:")
+print ("  INFLUXDB_URL:    " + influxdb_url)
+print ("  INFLUXDB_TOKEN:  " + influxdb_token[:4] + "..." + influxdb_token[-4:])
+print ("  INFLUXDB_ORG:    " + influxdb_org)
+print ("  INFLUXDB_BUCKET: " + influxdb_bucket)
+print ("  STATION_ID:      " + station_id)
 
 
 @app.route('/')

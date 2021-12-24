@@ -6,6 +6,8 @@ services:
     image: influxdb:latest
     ports:
       - '8086:8086'
+    networks:
+      - ecowitt_net
     volumes:
       - influxdb-storage:/var/lib/influxdb
     environment:
@@ -17,3 +19,6 @@ services:
 
 volumes:
     influxdb-storage:
+
+networks:
+    ecowitt_net:
