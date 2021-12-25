@@ -1,0 +1,37 @@
+---
+version: '3.3'
+
+services:
+  influxdb:
+    image: influxdb:2.1
+    ports:
+      - '8086:8086'
+    networks:
+      - ecowitt_net
+    volumes:
+      - influxdb-storage:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=thunderstorm
+      - DOCKER_INFLUXDB_INIT_ORG=my-weather-station
+      - DOCKER_INFLUXDB_INIT_BUCKET=ecowitt
+    #ecowither:
+    #  image: pa3hcm/ecowither:latest
+    #  ports:
+    #    - '8088:8088'
+    #  networks:
+    #    - ecowitt_net
+    #  environment:
+    #    - INFLUXDB_ORG=my-weather-station
+    #    - STATION_ID=IEVERD6
+    #    - INFLUXDB_URL='http://influxdb2_influxdb_1:8086/'
+    #    - INFLUXDB_TOKEN='RbvidPcc6x8h8Ym2D8t4M3qC37Rx4_V76LFCRGASHJyRlwJQ=='
+    #  depends_on:
+    #    - influxdb
+
+volumes:
+    influxdb-storage:
+
+networks:
+    ecowitt_net:
