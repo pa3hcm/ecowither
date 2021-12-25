@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecowither
+  namespace: ecowither
+  labels:
+    app: ecowither
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecowither
+  template:
+    metadata:
+      labels:
+        app: ecowither
+
+    spec:
+      volumes:
+        - name: influxdb-data
+          nfs:
+            server: odie.utreg.net
+            path: /export/kubevol2/ecowither/influxdb-data
+      containers:
+        - name: ecowither
+          image: pa3hcm/ecowither:latest
+          ports:
+            - containerPort: 8088
+          env:
+            - name: INFLUXDB_ORG
+              value: "my-weather-station"
+            - name: STATION_ID
+              value: "WS1"
+            - name: INFLUXDB_URL
+              value: "http://localhost:8086/"
+            - name: INFLUXDB_TOKEN
+              value: "RbvidPcc6x8h8Ym2D8t4M3qC37Rx4_V76LFCRGASHJyRlwJQ=="
+        - name: influxdb
+          image: influxdb:2.1
+          volumeMounts:
+            - name: influxdb-data
+              mountPath: /var/lib/influxdb2
+          ports:
+            - containerPort: 8086
+          env:
+            - name: DOCKER_INFLUXDB_INIT_MODE
+              value: "setup"
+            - name: DOCKER_INFLUXDB_INIT_USERNAME
+              value: "admin"
+            - name: DOCKER_INFLUXDB_INIT_PASSWORD
+              value: "thunderstorm"
+            - name: DOCKER_INFLUXDB_INIT_ORG
+              value: "my-weather-station"
+            - name: DOCKER_INFLUXDB_INIT_BUCKET
+              value: "ecowitt"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecowither-influxdb
+  namespace: ecowither
+  labels:
+    app: ecowither
+spec:
+  type: NodePort
+  selector:
+    app: ecowither
+  ports:
+    - name: ecowither-db
+      port: 8086
+      targetPort: 8086
+      nodePort: 32086
+    - name: ecowither-web
+      port: 8088
+      targetPort: 8088
+      nodePort: 32088
