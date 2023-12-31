@@ -96,12 +96,10 @@ def logEcowitt():
         else:
             fields = key + "=" + value
 
-    with InfluxDBClient(
-        url=influxdb_url, token=influxdb_token, org=influxdb_org
-    ) as client:
-        write_api = client.write_api(write_options=SYNCHRONOUS)
-        data = "weather,station_id={} {}".format(station_id, fields)
-        write_api.write(influxdb_bucket, influxdb_org, data)
+    client = InfluxDBClient(url=influxdb_url, token=influxdb_token, org=influxdb_org)
+    write_api = client.write_api(write_options=SYNCHRONOUS)
+    data = "weather,station_id={} {}".format(station_id, fields)
+    write_api.write(influxdb_bucket, influxdb_org, data)
 
     return data + "\n"
 
