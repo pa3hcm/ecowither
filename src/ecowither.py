@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+
+"""
+Simple API to log ecowither data to InfluxDB
+"""
+
+
 from datetime import datetime
 from flask import Flask, request
 from influxdb_client import InfluxDBClient, Point, WritePrecision
@@ -20,11 +27,44 @@ station_id = os.environ.get("STATION_ID", "my-station")
 @app.route("/")
 @app.route("/version")
 def version():
+    """
+    Return the version of the API
+    """
+
     return "Ecowither " + VERSION + "\n"
+
+
+@app.route("/ping")
+def ping():
+    """
+    Simple ping function to check if the API is running, returns a pong
+    """
+
+    return "pong\n"
+
+
+@app.route("/status")
+def status():
+    """
+    Causes the app to print the current status to the console
+    """
+
+    print(f"Ecowither {VERSION}")
+    print(f" - INFLUXDB_URL:    {influxdb_url}")
+    print(f" - INFLUXDB_TOKEN:  {influxdb_token[:4]}...{influxdb_token[-4:]}")
+    print(f" - INFLUXDB_ORG:    {influxdb_org}")
+    print(f" - INFLUXDB_BUCKET: {influxdb_bucket}")
+    print(f" - STATION_ID:      {station_id}")
+
+    return "ok\n"
 
 
 @app.route("/log/ecowitt", methods=["POST"])
 def logEcowitt():
+    """
+    Log data from ecowitt to InfluxDB
+    """
+
     fields = ""
 
     for field in request.get_data(as_text=True).split("&"):
@@ -105,13 +145,7 @@ def logEcowitt():
 
 
 if __name__ == "__main__":
-
-    print(f"Ecowither {VERSION}")
-    print(f" - INFLUXDB_URL:    {influxdb_url}")
-    print(f" - INFLUXDB_TOKEN:  {influxdb_token[:4]}...{influxdb_token[-4:]}")
-    print(f" - INFLUXDB_ORG:    {influxdb_org}")
-    print(f" - INFLUXDB_BUCKET: {influxdb_bucket}")
-    print(f" - STATION_ID:      {station_id}")
+    status()
     print("Waiting for data...")
-    
+
     app.run(host="0.0.0.0", port=8088)

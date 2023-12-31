@@ -23,10 +23,9 @@ docker-compose up -d
 cd ..
 ```
 
-Now build the [Alpine Linux](https://www.alpinelinux.org/) based Ecowither container from the `src/` directory:
+Now build the [Alpine Linux](https://www.alpinelinux.org/) based Ecowither container from the root directory of the code repository:
 
 ``` sh
-cd ../src
 docker build -t ecowither:0.2b .
 ```
 
@@ -45,6 +44,14 @@ docker run -d --name ecowither --network influxdb2_ecowitt_net -p 8088:8088 \
   -e INFLUXDB_TOKEN='RbvidPcc6x8h8Ym2D8t4M3qC37Rx4_V76LFCRGASHJyRlwJQ==' \
   ecowither:0.2b
 ```
+
+For `INFLUXDB_TOKEN` you can use the admin token to make this work:
+
+``` sh
+docker exec -t influxdb-influxdb-1 influx auth list
+```
+
+However, for security reasons, it is recommended to create a separate token for this with just enough access to write data to the ecowither bucket. Please read the [Influx API tokens documentation](https://docs.influxdata.com/influxdb/v2/admin/tokens/) for more information.
 
 
 ## License
