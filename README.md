@@ -34,7 +34,7 @@ Now build the Ecowither container from the same directory that holds the
 Dockerfile:
 
 ```
-docker build -t ecowither:0.1 .
+docker build -t ecowither:0.2 .
 ```
 
 Now run the Ecowither container. Ensure the network name is set correctly
