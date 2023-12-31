@@ -36,7 +36,7 @@ spec:
             - name: INFLUXDB_TOKEN
               value: "RbvidPcc6x8h8Ym2D8t4M3qC37Rx4_V76LFCRGASHJyRlwJQ=="
         - name: influxdb
-          image: influxdb:2.1
+          image: influxdb:2.6
           volumeMounts:
             - name: influxdb-data
               mountPath: /var/lib/influxdb2

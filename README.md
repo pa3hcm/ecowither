@@ -1,5 +1,6 @@
 # Ecowither
 
+
 ## Introduction
 
 This is a simple application to log data of my weather station to InfluxDB.
@@ -18,22 +19,23 @@ My weather station logs data to a server that runs Ecowither and InfluxDB
 customized weather service. I selected the 'ecowitt' protocol type, since
 this includes data of additional sensors (Wunderground doesn't).
 
+
 ## How to run
 
 I selected InfluxDB v2 as a reliable and easy-to-use time series database.
-The code includes an example docker-compose.yml to start the containerized
+The code includes an example `compose.yml` to start the containerized
 version. Start the container before running Ecowither:
 
-```
+``` sh
 cd influxdb
 docker-compose up -d
 cd ..
 ```
 
-Now build the Ecowither container from the same directory that holds the
-Dockerfile:
+Now build the Ecowither container from the `src/` directory:
 
-```
+``` sh
+cd ../src
 docker build -t ecowither:0.2 .
 ```
 
@@ -47,7 +49,7 @@ docker run -d --name ecowither --network influxdb2_ecowitt_net -p 8088:8088 \
   -e INFLUXDB_ORG=my-weather-station -e STATION_ID=WS1 \
   -e INFLUXDB_URL='http://influxdb2_influxdb_1:8086/' \
   -e INFLUXDB_TOKEN='RbvidPcc6x8h8Ym2D8t4M3qC37Rx4_V76LFCRGASHJyRlwJQ==' \
-  ecowither:0.1
+  ecowither:0.2
 ```
 
 
