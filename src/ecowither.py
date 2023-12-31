@@ -105,12 +105,13 @@ def logEcowitt():
 
 
 if __name__ == "__main__":
+
     print(f"Ecowither {VERSION}")
-    print("==============")
-    print("Configuration:")
-    print("  INFLUXDB_URL:    " + influxdb_url)
-    print("  INFLUXDB_TOKEN:  " + influxdb_token[:4] + "..." + influxdb_token[-4:])
-    print("  INFLUXDB_ORG:    " + influxdb_org)
-    print("  INFLUXDB_BUCKET: " + influxdb_bucket)
-    print("  STATION_ID:      " + station_id)
-    app.run(host="0.0.0.0", port=8088, debug=True)
+    print(f" - INFLUXDB_URL:    {influxdb_url}")
+    print(f" - INFLUXDB_TOKEN:  {influxdb_token[:4]}...{influxdb_token[-4:]}")
+    print(f" - INFLUXDB_ORG:    {influxdb_org}")
+    print(f" - INFLUXDB_BUCKET: {influxdb_bucket}")
+    print(f" - STATION_ID:      {station_id}")
+    print("Waiting for data...")
+    
+    app.run(host="0.0.0.0", port=8088)
