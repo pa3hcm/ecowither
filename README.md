@@ -26,7 +26,7 @@ cd ..
 Now build the [Alpine Linux](https://www.alpinelinux.org/) based Ecowither container from the root directory of the code repository:
 
 ``` sh
-docker build -t ecowither:0.2b .
+docker build -t ecowither:0.3b .
 ```
 
 Alternatively you can pull the container from [Docker Hub](https://hub.docker.com/r/pa3hcm/ecowither), however I do not actively maintain this image, so use it at your own risk:

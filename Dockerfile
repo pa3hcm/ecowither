@@ -1,4 +1,4 @@
-FROM alpine:3.19
+FROM alpine:3.21
 
 RUN apk --update --no-cache add py3-pip \
  && pip install --no-cache-dir influxdb-client flask --break-system-packages \
