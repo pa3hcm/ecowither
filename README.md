@@ -26,13 +26,13 @@ cd ..
 Now build the [Alpine Linux](https://www.alpinelinux.org/) based Ecowither container from the root directory of the code repository:
 
 ``` sh
-docker build -t ecowither:0.4b .
+docker build -t ecowither:0.3b .
 ```
 
 Alternatively you can pull the container from [Docker Hub](https://hub.docker.com/r/pa3hcm/ecowither), however I do not actively maintain this image, so use it at your own risk:
 
 ``` sh
-docker pull pa3hcm/ecowither:0.4b
+docker pull pa3hcm/ecowither:0.2b
 ```
 
 Now run the Ecowither container. Ensure the network name is set correctly (use `docker network ls` to find out the correct network name created by the InfluxDB container). Also check the name of the InfluxDB container in the given URL (use `docker ps`).
