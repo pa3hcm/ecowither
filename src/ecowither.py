@@ -12,7 +12,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import os
 
 
-VERSION = "v0.3b"
+VERSION = "v1.0"
 
 
 app = Flask(__name__)

@@ -14,7 +14,6 @@ spec:
     metadata:
       labels:
         app: ecowither
-
     spec:
       volumes:
         - name: influxdb-data
@@ -23,7 +22,7 @@ spec:
             path: /export/kubevol2/ecowither/influxdb-data
       containers:
         - name: ecowither
-          image: pa3hcm/ecowither:latest
+          image: pa3hcm/ecowither:v1.0-alpine323
           ports:
             - containerPort: 8088
           env:
@@ -36,7 +35,7 @@ spec:
             - name: INFLUXDB_TOKEN
               value: "RbvidPcc6x8h8Ym2D8t4M3qC37Rx4_V76LFCRGASHJyRlwJQ=="
         - name: influxdb
-          image: influxdb:2.6
+          image: influxdb:2.7
           volumeMounts:
             - name: influxdb-data
               mountPath: /var/lib/influxdb2
