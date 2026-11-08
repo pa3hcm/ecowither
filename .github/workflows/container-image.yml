@@ -13,10 +13,8 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 env:
-  GHCR_IMAGE: ghcr.io/${{ github.repository }}
   DOCKERHUB_USERNAME: pa3hcm
   DOCKERHUB_IMAGE: docker.io/pa3hcm/ecowither
 
@@ -44,14 +42,6 @@ jobs:
           echo "app=$app" >> "$GITHUB_OUTPUT"
           echo "alpine=$alpine" >> "$GITHUB_OUTPUT"
 
-      - name: Log in to GHCR
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Check Docker Hub token
         if: github.event_name != 'pull_request'
         env:
@@ -73,9 +63,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: |
-            ${{ env.DOCKERHUB_IMAGE }}
-            ${{ env.GHCR_IMAGE }}
+          images: ${{ env.DOCKERHUB_IMAGE }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=${{ steps.versions.outputs.app }},enable={{is_default_branch}}
