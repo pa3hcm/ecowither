@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # Alpine base image in the Dockerfile
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+
+  # Python packages in src/requirements.txt
+  - package-ecosystem: pip
+    directory: /src
+    schedule:
+      interval: weekly
+
+  # Actions used in .github/workflows
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

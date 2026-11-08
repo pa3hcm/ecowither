@@ -26,7 +26,7 @@ cd ..
 Now build the [Alpine Linux](https://www.alpinelinux.org/) based Ecowither container from the root directory of the code repository:
 
 ``` sh
-docker build -t ecowither:v1.0-alpine3.23 .
+docker build -t ecowither:v1.0-alpine3.24 .
 ```
 
 Alternatively you can pull the container from [Docker Hub](https://hub.docker.com/r/pa3hcm/ecowither), however I do not actively maintain this image, so use it at your own risk:
@@ -42,7 +42,7 @@ docker run -d --name ecowither --network influxdb2_ecowitt_net -p 8088:8088 \
   -e INFLUXDB_ORG=my-weather-station -e STATION_ID=WS1 \
   -e INFLUXDB_URL='http://influxdb2_influxdb_1:8086/' \
   -e INFLUXDB_TOKEN='RbvidPcc6x8h8Ym2D8t4M3qC37Rx4_V76LFCRGASHJyRlwJQ==' \
-  ecowither:v1.0-alpine3.23
+  ecowither:v1.0-alpine3.24
 ```
 
 For `INFLUXDB_TOKEN` you can use the admin token to make this work:
