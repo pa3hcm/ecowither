@@ -7,8 +7,8 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    # Weekly rebuild (Monday 04:17 UTC) to pick up Alpine security patches
-    - cron: "17 4 * * 1"
+    # Monthly rebuild (1st of the month, 04:17 UTC) to pick up Alpine security patches
+    - cron: "17 4 1 * *"
   workflow_dispatch:
 
 permissions:
@@ -17,6 +17,7 @@ permissions:
 
 env:
   GHCR_IMAGE: ghcr.io/${{ github.repository }}
+  DOCKERHUB_USERNAME: pa3hcm
   DOCKERHUB_IMAGE: docker.io/pa3hcm/ecowither
 
 jobs:
@@ -29,6 +30,20 @@ jobs:
 
       - uses: docker/setup-buildx-action@v4
 
+      # App version from src/ecowither.py and Alpine version from the Dockerfile,
+      # for the Docker Hub tags users already know (e.g. v1.0 and v1.0-alpine3.24)
+      - name: Read versions
+        id: versions
+        run: |
+          app=$(sed -n 's/^VERSION = "\(.*\)"$/\1/p' src/ecowither.py)
+          alpine=$(sed -n 's/^FROM alpine:\([0-9.]*\).*$/\1/p' Dockerfile)
+          if [ -z "$app" ] || [ -z "$alpine" ]; then
+            echo "::error::Could not read the app version ($app) or Alpine version ($alpine)"
+            exit 1
+          fi
+          echo "app=$app" >> "$GITHUB_OUTPUT"
+          echo "alpine=$alpine" >> "$GITHUB_OUTPUT"
+
       - name: Log in to GHCR
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
@@ -37,18 +52,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Optional: only pushes to Docker Hub when the secrets are configured
-      - name: Check for Docker Hub credentials
-        id: dockerhub
+      - name: Check Docker Hub token
+        if: github.event_name != 'pull_request'
         env:
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: echo "enabled=${{ github.event_name != 'pull_request' && env.DOCKERHUB_TOKEN != '' }}" >> "$GITHUB_OUTPUT"
+        run: |
+          if [ -z "$DOCKERHUB_TOKEN" ]; then
+            echo "::error::The DOCKERHUB_TOKEN secret is not set; it is needed to push to Docker Hub"
+            exit 1
+          fi
 
       - name: Log in to Docker Hub
-        if: steps.dockerhub.outputs.enabled == 'true'
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Image metadata
@@ -56,10 +74,12 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: |
+            ${{ env.DOCKERHUB_IMAGE }}
             ${{ env.GHCR_IMAGE }}
-            name=${{ env.DOCKERHUB_IMAGE }},enable=${{ steps.dockerhub.outputs.enabled }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ steps.versions.outputs.app }},enable={{is_default_branch}}
+            type=raw,value=${{ steps.versions.outputs.app }}-alpine${{ steps.versions.outputs.alpine }},enable={{is_default_branch}}
             type=sha,format=short
             type=schedule,pattern={{date 'YYYYMMDD'}}
             type=semver,pattern={{version}}
@@ -73,7 +93,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           pull: true
-          # Skip the layer cache on the weekly run, otherwise the apk upgrade layer is reused
+          # Skip the layer cache on the monthly run, otherwise the apk upgrade layer is reused
           no-cache: ${{ github.event_name == 'schedule' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

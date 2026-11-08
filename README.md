@@ -29,11 +29,13 @@ Now build the [Alpine Linux](https://www.alpinelinux.org/) based Ecowither conta
 docker build -t ecowither:v1.0-alpine3.24 .
 ```
 
-Alternatively you can pull the container from [Docker Hub](https://hub.docker.com/r/pa3hcm/ecowither), however I do not actively maintain this image, so use it at your own risk:
+Alternatively you can pull the container from [Docker Hub](https://hub.docker.com/r/pa3hcm/ecowither) (or `ghcr.io/pa3hcm/ecowither`). The image is built automatically for amd64 and arm64 on every change, and rebuilt monthly to include the latest Alpine security updates:
 
 ``` sh
-docker pull pa3hcm/ecowither:v1.0-alpine3.23
+docker pull pa3hcm/ecowither:v1.0-alpine3.24
 ```
+
+Available tags: `latest`, `v1.0`, `v1.0-alpine3.24`, and `sha-<commit>` for a specific commit.
 
 Now run the Ecowither container. Ensure the network name is set correctly (use `docker network ls` to find out the correct network name created by the InfluxDB container). Also check the name of the InfluxDB container in the given URL (use `docker ps`).
 
